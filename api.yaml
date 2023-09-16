@@ -1,0 +1,791 @@
+openapi: 3.0.0
+paths:
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_0
+        - auth
+  /auth/register:
+    post:
+      operationId: AuthController_register
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '201':
+          description: ''
+      tags: *ref_0
+  /auth/logout:
+    post:
+      operationId: AuthController_logout
+      parameters: []
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_0
+  /users/notes:
+    post:
+      operationId: UsersNotesController_createUserNote
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserNoteDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: &ref_1
+        - users-notes
+    get:
+      operationId: UsersNotesController_findAllUserNotes
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_1
+  /users/notes/{id}:
+    get:
+      operationId: UsersNotesController_findOneUserNote
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_1
+    patch:
+      operationId: UsersNotesController_updateUserNote
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNoteDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_1
+    delete:
+      operationId: UsersNotesController_removeUserNote
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_1
+  /users/contacts:
+    post:
+      operationId: UsersContactsController_createUserContact
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserContactDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: &ref_2
+        - users-contacts
+    get:
+      operationId: UsersContactsController_findAllUserContacts
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_2
+  /users/contacts/{id}:
+    get:
+      operationId: UsersContactsController_findOneUserContact
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_2
+    patch:
+      operationId: UsersContactsController_updateUserContact
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_2
+    delete:
+      operationId: UsersContactsController_removeUserContact
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_2
+  /users/me:
+    get:
+      operationId: UsersMeController_me
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: &ref_3
+        - users-me
+    patch:
+      operationId: UsersMeController_updateMe
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_3
+  /users:
+    post:
+      operationId: UsersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: &ref_4
+        - users
+    get:
+      operationId: UsersController_findAll
+      parameters:
+        - name: id
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: email
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: name
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_4
+  /users/{id}:
+    get:
+      operationId: UsersController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_4
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_4
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveUserDto'
+      tags: *ref_4
+  /notes:
+    post:
+      operationId: NotesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNoteDto'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_5
+        - notes
+    get:
+      operationId: NotesController_findAll
+      parameters:
+        - name: id
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: title
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: content
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_5
+  /notes/{id}:
+    get:
+      operationId: NotesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNoteDto'
+      tags: *ref_5
+    patch:
+      operationId: NotesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNoteDto'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_5
+    delete:
+      operationId: NotesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_5
+  /contacts:
+    post:
+      operationId: ContactsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: &ref_6
+        - contacts
+    get:
+      operationId: ContactsController_findAll
+      parameters:
+        - name: id
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: firstName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: lastName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: email
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: phone
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: dateOfBirth
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: instagram
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_6
+  /contacts/{id}:
+    get:
+      operationId: ContactsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_6
+    patch:
+      operationId: ContactsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_6
+    delete:
+      operationId: ContactsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveContactDto'
+      tags: *ref_6
+info:
+  title: EasyNotes API
+  description: Documentation for EasyNotes API
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    RegisterDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    RetrieveUserDto:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        bio:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - email
+        - password
+        - name
+        - bio
+        - createdAt
+        - updatedAt
+    CreateUserNoteDto:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - title
+        - content
+    RetrieveNoteDto:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        content:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        userId:
+          type: number
+      required:
+        - id
+        - title
+        - content
+        - createdAt
+        - updatedAt
+        - userId
+    UpdateNoteDto:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        userId:
+          type: number
+    CreateUserContactDto:
+      type: object
+      properties: {}
+    RetrieveContactDto:
+      type: object
+      properties:
+        id:
+          type: number
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          format: date-time
+          type: string
+        instagram:
+          type: string
+        note:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        userId:
+          type: number
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - phone
+        - dateOfBirth
+        - instagram
+        - note
+        - createdAt
+        - updatedAt
+        - userId
+    UpdateContactDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+        instagram:
+          type: string
+        note:
+          type: string
+        userId:
+          type: number
+    UpdateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        bio:
+          type: string
+    CreateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        bio:
+          type: string
+      required:
+        - email
+        - password
+    CreateNoteDto:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        userId:
+          type: number
+      required:
+        - title
+        - content
+        - userId
+    CreateContactDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+        instagram:
+          type: string
+        note:
+          type: string
+        userId:
+          type: number
+      required:
+        - userId

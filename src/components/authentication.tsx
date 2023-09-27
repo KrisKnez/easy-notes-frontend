@@ -4,7 +4,6 @@ import LoadingLayout from "@/layouts/loading";
 import { NextPageWithLayout } from "@/pages/_app";
 import { CircularProgress } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
-import { Fahkwang } from "next/font/google";
 import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
 
@@ -28,7 +27,7 @@ const Authentication = (props: AuthenticationProps) => {
     },
   });
 
-  if (!data && !error && isLoading) return <LoadingLayout />;
+  // if (!data && !error && isLoading) return <LoadingLayout />;
 
   if (
     page.authn?.mustBe === "loggedIn" &&

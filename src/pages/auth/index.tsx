@@ -138,7 +138,7 @@ const AuthPage: NextPageWithLayout = () => {
                 mt: 3,
                 mb: 2,
               }}
-              disabled={loginMutation.isLoading || loginMutation.at}
+              disabled={loginMutation.isLoading}
             >
               Login
             </Button>

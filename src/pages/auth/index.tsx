@@ -14,6 +14,8 @@ import Typography from "@mui/material/Typography";
 import { NextPageWithLayout } from "../_app";
 import { useQueryClient } from "@tanstack/react-query";
 import useLoginMutation from "@/hooks/useLoginMutation";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 function Copyright(props: any) {
   return (
@@ -43,13 +45,23 @@ const AuthPage: NextPageWithLayout = () => {
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    if (email && password)
-      loginMutation.mutate({
-        data: {
-          email: email.toString(),
-          password: password.toString(),
-        },
-      });
+    if (email && password) {
+      loginMutation
+        .mutateAsync({
+          data: {
+            email: email.toString(),
+            password: password.toString(),
+          },
+        })
+        .then(() => toast.success("Successfully logged in"))
+        .catch((e) => {
+          if (e instanceof AxiosError)
+            toast.error(
+              e.response?.data.message || e.message || "Unknown Error"
+            );
+          else toast.error("Unknown Error");
+        });
+    }
   };
 
   return (
@@ -126,6 +138,7 @@ const AuthPage: NextPageWithLayout = () => {
                 mt: 3,
                 mb: 2,
               }}
+              disabled={loginMutation.isLoading || loginMutation.at}
             >
               Login
             </Button>

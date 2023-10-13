@@ -2,10 +2,10 @@ import { getUsersMeControllerMeQueryKey, useUsersMeControllerMe } from "@/api";
 import { axiosConfig } from "@/axios";
 import LoadingLayout from "@/layouts/loading";
 import { NextPageWithLayout } from "@/pages/_app";
-import { CircularProgress } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 export interface AuthenticationProps {
   children: ReactNode;
@@ -19,22 +19,37 @@ const Authentication = (props: AuthenticationProps) => {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useUsersMeControllerMe({
+  // Persisted error is error which is present until a successful response is received.
+  // Usually error is present until start of retry which is not ideal for us.
+  const [persistedError, setPersistedError] = useState<
+    AxiosError | undefined
+  >();
+
+  const { data, error, isLoading, status } = useUsersMeControllerMe({
     axios: axiosConfig,
     query: {
       retry: false,
-      enabled: true,
     },
   });
+  useEffect(() => {
+    switch (status) {
+      case "error":
+        setPersistedError(error);
+        break;
+      case "success":
+        setPersistedError(undefined);
+        break;
+    }
+  }, [status, error]);
 
-  // if (!data && !error && isLoading) return <LoadingLayout />;
+  if (!data && !persistedError && isLoading) return <LoadingLayout />;
 
   if (
     page.authn?.mustBe === "loggedIn" &&
     (error?.response?.status === 401 || error?.response?.status === 403)
   ) {
     router.push("/auth");
-    return <CircularProgress />;
+    return <LoadingLayout />;
   }
 
   if (
@@ -43,7 +58,7 @@ const Authentication = (props: AuthenticationProps) => {
     data
   ) {
     router.push("/dashboard");
-    return <CircularProgress />;
+    return <LoadingLayout />;
   }
 
   return children;

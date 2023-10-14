@@ -16,6 +16,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import useLoginMutation from "@/hooks/useLoginMutation";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
+import LoginForm from "@/forms/login-form";
+import { Stack } from "@mui/material";
 
 function Copyright(props: any) {
   return (
@@ -100,62 +102,23 @@ const AuthPage: NextPageWithLayout = () => {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 3,
-                mb: 2,
-              }}
-              disabled={loginMutation.isLoading}
-            >
-              Login
-            </Button>
+          <Stack width="100%" maxWidth="550px" spacing="25px" marginTop="25px">
+            <LoginForm width="100%" />
+
             <Grid container>
-              {/* <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid> */}
-              {/* <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid> */}
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
-          </Box>
+            {/* <Copyright sx={{ mt: 5 }} /> */}
+          </Stack>
         </Box>
       </Grid>
     </Grid>

@@ -38,34 +38,6 @@ function Copyright(props: any) {
 }
 
 const AuthPage: NextPageWithLayout = () => {
-  const queryClient = useQueryClient();
-
-  const loginMutation = useLoginMutation();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email");
-    const password = data.get("password");
-    if (email && password) {
-      loginMutation
-        .mutateAsync({
-          data: {
-            email: email.toString(),
-            password: password.toString(),
-          },
-        })
-        .then(() => toast.success("Successfully logged in"))
-        .catch((e) => {
-          if (e instanceof AxiosError)
-            toast.error(
-              e.response?.data.message || e.message || "Unknown Error"
-            );
-          else toast.error("Unknown Error");
-        });
-    }
-  };
-
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />

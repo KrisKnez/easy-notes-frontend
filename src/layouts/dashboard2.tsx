@@ -79,7 +79,17 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
                       <MdApps />
                     </IconButton>
                   </Tooltip>
-                  <Menu {...bindMenu(popupState)}>
+                  <Menu
+                    {...bindMenu(popupState)}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                  >
                     <MenuList>
                       <Link href="/dashboard/notes" style={{ all: "unset" }}>
                         <MenuItem onClick={popupState.close}>

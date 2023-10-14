@@ -13,6 +13,7 @@ import {
   useUsersContactsControllerRemoveUserContact,
   useUsersContactsControllerUpdateUserContact,
 } from "@/api";
+import Dashboard2Layout from "@/layouts/dashboard2";
 
 const ContactsPage: NextPageWithLayout = () => {
   // Query Client
@@ -119,7 +120,7 @@ const ContactsPage: NextPageWithLayout = () => {
 };
 
 ContactsPage.getLayout = (page) => {
-  return <DashboardLayout title="Contacts">{page}</DashboardLayout>;
+  return <Dashboard2Layout title="Contacts">{page}</Dashboard2Layout>;
 };
 
 ContactsPage.authn = {

@@ -42,6 +42,7 @@ const ContactCard = (props: ContactCardProps) => {
     }
   );
 
+
   return (
     <Box
       {...restProps}

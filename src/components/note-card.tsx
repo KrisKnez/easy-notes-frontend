@@ -30,6 +30,9 @@ const NoteCard = (props: NoteCardProps) => {
     }
   );
 
+  console.log(JSON.stringify(data), JSON.stringify(currentData));
+
+
   return (
     <Box
       {...restProps}

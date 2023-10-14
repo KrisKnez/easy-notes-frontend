@@ -1,6 +1,7 @@
 import React from "react";
 import { NextPageWithLayout } from "../_app";
 import DashboardLayout from "@/layouts/dashboard";
+import Dashboard2Layout from "@/layouts/dashboard2";
 import { Grid, Stack } from "@mui/material";
 import NoteCard from "@/components/note-card";
 import { useQueryClient } from "@tanstack/react-query";
@@ -112,7 +113,8 @@ const NotesPage: NextPageWithLayout = () => {
 };
 
 NotesPage.getLayout = (page) => {
-  return <DashboardLayout title="Notes">{page}</DashboardLayout>;
+  // return <DashboardLayout title="Notes">{page}</DashboardLayout>;
+  return <Dashboard2Layout>{page}</Dashboard2Layout>;
 };
 
 NotesPage.authn = {

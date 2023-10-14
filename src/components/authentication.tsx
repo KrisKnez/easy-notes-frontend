@@ -22,7 +22,7 @@ const Authentication = (props: AuthenticationProps) => {
     AxiosError | undefined
   >();
 
-  const { data, error, isLoading, status } = useUsersMeControllerMe({
+  const { data, error, status } = useUsersMeControllerMe({
     axios: axiosConfig,
     query: {
       retry: false,
@@ -39,9 +39,9 @@ const Authentication = (props: AuthenticationProps) => {
     }
   }, [status, error]);
 
-  if (!data && !persistedError && isLoading) return <LoadingLayout />;
+  if (!data && !persistedError) return <LoadingLayout />;
 
-  const isAuthn = error?.response?.status !== 401;
+  const isAuthn = persistedError?.response?.status !== 401;
 
   if (!page.authn)
     if (isAuthn) {

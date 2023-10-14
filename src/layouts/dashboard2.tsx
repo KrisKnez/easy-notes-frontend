@@ -82,7 +82,7 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
                   <Menu {...bindMenu(popupState)}>
                     <MenuList>
                       <Link href="/dashboard/notes" style={{ all: "unset" }}>
-                        <MenuItem>
+                        <MenuItem onClick={popupState.close}>
                           <ListItemIcon>
                             <MdContacts />
                           </ListItemIcon>
@@ -90,7 +90,7 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
                         </MenuItem>
                       </Link>
                       <Link href="/dashboard/contacts" style={{ all: "unset" }}>
-                        <MenuItem>
+                        <MenuItem onClick={popupState.close}>
                           <ListItemIcon>
                             <MdNoteAlt />
                           </ListItemIcon>

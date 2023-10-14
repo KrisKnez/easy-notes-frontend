@@ -25,6 +25,8 @@
     "autoprefixer": "10.4.15",
     "axios": "^1.5.0",
     "dayjs": "^1.11.9",
+    "deepmerge": "^4.3.1",
+    "deepmerge-ts": "^5.1.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "material-ui-popup-state": "^5.0.9",

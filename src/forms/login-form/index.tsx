@@ -6,7 +6,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { z } from "zod";
@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 
 import getErrorMessage from "@/utils/axios-error-handling/get-error-message";
 import getFieldErrorMessage from "@/utils/axios-error-handling/get-field-error-message";
+import getAllFieldErrorMessages from "@/utils/axios-error-handling/get-all-field-error-messages";
 
 export const LoginFormFieldsSchema = z.object({
   email: z
@@ -35,12 +36,20 @@ export const defaultLoginFormFields: LoginFormFields = {
 export interface LoginFormProps extends Omit<BoxProps, "children"> {}
 
 const LoginForm = (props: LoginFormProps) => {
-  const { control, handleSubmit } = useForm<LoginFormFields>({
+  const { control, handleSubmit, setError } = useForm<LoginFormFields>({
     defaultValues: defaultLoginFormFields,
     resolver: zodResolver(LoginFormFieldsSchema),
   });
 
   const loginMutation = useLoginMutation();
+
+  useEffect(() => {
+    if (loginMutation.error) {
+      getAllFieldErrorMessages(loginMutation.error)?.forEach((fieldMessage) =>
+        setError(fieldMessage.field as any, { message: fieldMessage.message })
+      );
+    }
+  }, [loginMutation.error, setError]);
 
   return (
     <Box
@@ -69,13 +78,8 @@ const LoginForm = (props: LoginFormProps) => {
               autoComplete="email"
               autoFocus
               {...field}
-              error={
-                !!(error || getFieldErrorMessage("email", loginMutation.error))
-              }
-              helperText={
-                error?.message ||
-                getFieldErrorMessage("email", loginMutation.error)
-              }
+              error={!!error}
+              helperText={error?.message}
             />
           )}
         />

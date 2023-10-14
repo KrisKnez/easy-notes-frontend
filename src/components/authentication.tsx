@@ -1,8 +1,7 @@
-import { getUsersMeControllerMeQueryKey, useUsersMeControllerMe } from "@/api";
+import { useUsersMeControllerMe } from "@/api";
 import { axiosConfig } from "@/axios";
 import LoadingLayout from "@/layouts/loading";
 import { NextPageWithLayout } from "@/pages/_app";
-import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
@@ -17,10 +16,8 @@ const Authentication = (props: AuthenticationProps) => {
 
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-
   // Persisted error is error which is present until a successful response is received.
-  // Usually error is present until start of retry which is not ideal for us.
+  // Usually error is present until start of retry which is not ideal for us and will cause flicker.
   const [persistedError, setPersistedError] = useState<
     AxiosError | undefined
   >();
@@ -44,19 +41,24 @@ const Authentication = (props: AuthenticationProps) => {
 
   if (!data && !persistedError && isLoading) return <LoadingLayout />;
 
-  if (
-    page.authn?.mustBe === "loggedIn" &&
-    (error?.response?.status === 401 || error?.response?.status === 403)
-  ) {
+  const isAuthn = error?.response?.status !== 401;
+
+  if (!page.authn)
+    if (isAuthn) {
+      router.push("/dashboard");
+      return <LoadingLayout />;
+    } else {
+      // !isAuthn
+      router.push("/auth");
+      return <LoadingLayout />;
+    }
+
+  if (page.authn.mustBe === "loggedIn" && !isAuthn) {
     router.push("/auth");
     return <LoadingLayout />;
   }
 
-  if (
-    page.authn?.mustBe === "notLoggedIn" &&
-    !(error?.response?.status === 401 || error?.response?.status === 403) &&
-    data
-  ) {
+  if (page.authn.mustBe === "notLoggedIn" && isAuthn) {
     router.push("/dashboard");
     return <LoadingLayout />;
   }

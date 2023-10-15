@@ -10,6 +10,7 @@
     "generate-api-client": "orval --input ./api.yaml --output ./src/api.ts --client react-query"
   },
   "dependencies": {
+    "@ebay/nice-modal-react": "^1.2.13",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.2",

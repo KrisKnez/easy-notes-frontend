@@ -6,8 +6,14 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, {
+  MutableRefObject,
+  Ref,
+  RefObject,
+  useEffect,
+  useRef,
+} from "react";
+import { Controller, UseFormReturn, useForm } from "react-hook-form";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +23,7 @@ import toast from "react-hot-toast";
 import getErrorMessage from "@/utils/axios-error-handling/get-error-message";
 import getFieldErrorMessage from "@/utils/axios-error-handling/get-field-error-message";
 import getAllFieldErrorMessages from "@/utils/axios-error-handling/get-all-field-error-messages";
+import { MdCheck, MdLogin } from "react-icons/md";
 
 export const LoginFormFieldsSchema = z.object({
   email: z
@@ -33,13 +40,21 @@ export const defaultLoginFormFields: LoginFormFields = {
   password: "",
 };
 
-export interface LoginFormProps extends Omit<BoxProps, "children"> {}
+export type LoginFormInstance = UseFormReturn<LoginFormFields, any, undefined>;
+
+export interface LoginFormProps extends Omit<BoxProps, "children"> {
+  formRef?: MutableRefObject<LoginFormInstance>;
+}
 
 const LoginForm = (props: LoginFormProps) => {
-  const { control, handleSubmit, setError } = useForm<LoginFormFields>({
+  const { formRef } = props;
+
+  const form: LoginFormInstance = useForm<LoginFormFields>({
     defaultValues: defaultLoginFormFields,
     resolver: zodResolver(LoginFormFieldsSchema),
   });
+  if (formRef) formRef.current = form;
+  const { control, handleSubmit, setError } = form;
 
   const loginMutation = useLoginMutation();
 
@@ -93,7 +108,6 @@ const LoginForm = (props: LoginFormProps) => {
               label="Password"
               fullWidth
               autoComplete="password"
-              autoFocus
               {...field}
               error={!!error}
               helperText={error?.message}
@@ -105,12 +119,14 @@ const LoginForm = (props: LoginFormProps) => {
           type="submit"
           variant="contained"
           disabled={loginMutation.isLoading}
+          endIcon={
+            (loginMutation.isLoading && (
+              <CircularProgress size="1em" color="inherit" />
+            )) ||
+            (loginMutation.isSuccess && <MdCheck />) || <MdLogin />
+          }
         >
-          {loginMutation.isLoading ? (
-            <CircularProgress size="1.75em" />
-          ) : (
-            "Login"
-          )}
+          Login
         </Button>
       </Stack>
     </Box>

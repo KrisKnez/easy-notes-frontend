@@ -1,5 +1,6 @@
 import Authentication from "@/components/authentication";
 import "@/styles/globals.css";
+import NiceModal from "@ebay/nice-modal-react";
 import { CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -30,7 +31,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <QueryClientProvider client={queryClient}>
       <CssBaseline />
       <Authentication page={Component}>
-        {getLayout(<Component {...pageProps} />)}
+        <NiceModal.Provider>
+          {getLayout(<Component {...pageProps} />)}
+        </NiceModal.Provider>
       </Authentication>
       <Toaster position="bottom-center" />
       <ReactQueryDevtools initialIsOpen={false} />

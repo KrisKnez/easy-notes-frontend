@@ -3,6 +3,7 @@ import {
   Box,
   BoxProps,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Icon,
@@ -25,6 +26,7 @@ import { RiQuillPenFill } from "react-icons/ri";
 import {
   MdAccountCircle,
   MdApps,
+  MdCheck,
   MdContacts,
   MdLogout,
   MdNoteAlt,
@@ -33,6 +35,8 @@ import useLogoutMutation from "@/hooks/useLogoutMutation";
 import toast from "react-hot-toast";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import getErrorMessage from "@/utils/axios-error-handling/get-error-message";
+import NiceModal from "@ebay/nice-modal-react";
+import AccountModal from "@/modals/account-modal";
 
 export interface Dashboard2LayoutProps extends StackProps {}
 
@@ -115,7 +119,10 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
 
             {/* TODO: Implement Profile modal */}
             <Tooltip title="Open Account Modal">
-              <IconButton color="inherit">
+              <IconButton
+                color="inherit"
+                onClick={() => NiceModal.show(AccountModal)}
+              >
                 <MdAccountCircle />
               </IconButton>
             </Tooltip>
@@ -131,7 +138,10 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
                   })
                 }
               >
-                <MdLogout />
+                {(logoutMutation.isLoading && (
+                  <CircularProgress size="1em" color="inherit" />
+                )) ||
+                  (logoutMutation.isSuccess && <MdCheck />) || <MdLogout />}
               </IconButton>
             </Tooltip>
           </Stack>

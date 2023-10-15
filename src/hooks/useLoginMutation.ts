@@ -8,11 +8,11 @@ const useLoginMutation = () => {
   return useAuthControllerLogin({
     axios: axiosConfig,
     mutation: {
-      onSuccess(data, variables, context) {
-        queryClient.refetchQueries(getUsersMeControllerMeQueryKey());
+      onSuccess(data) {
+        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
       },
     },
   });
 };
 
-export default useLoginMutation
+export default useLoginMutation;

@@ -40,13 +40,28 @@ const ChangePasswordModal = NiceModal.create(
           <Box>
             <Grid container spacing={1} py={1}>
               <Grid item xs={12}>
-                <TextField type="password" label="Current Password" fullWidth />
+                <TextField
+                  type="password"
+                  label="Current Password"
+                  placeholder="Your Current password"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField type="password" label="New Password" fullWidth />
+                <TextField
+                  type="password"
+                  label="New Password"
+                  placeholder="Your New Password"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField type="password" label="Repeat Password" fullWidth />
+                <TextField
+                  type="password"
+                  label="Repeat Password"
+                  placeholder="Repeat New Password"
+                  fullWidth
+                />
               </Grid>
             </Grid>
           </Box>

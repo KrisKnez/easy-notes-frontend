@@ -26,6 +26,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { axiosConfig } from "@/axios";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export const AccountFormFieldsSchema = z.object({
   name: z.string().min(1, "Required field"),
@@ -79,6 +80,8 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
           name: data.data.name || "",
           bio: data.data.bio || "",
         });
+
+        toast.success("Updated Data");
       },
       // Simulate delay
       onMutate: () => new Promise((resolve) => setTimeout(resolve, 750)),

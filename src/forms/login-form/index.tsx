@@ -88,7 +88,8 @@ const LoginForm = (props: LoginFormProps) => {
           render={({ field, fieldState: { error } }) => (
             <TextField
               type="text"
-              label="Email Address"
+              label="Email"
+              placeholder="Your Email"
               fullWidth
               autoComplete="email"
               autoFocus
@@ -106,6 +107,7 @@ const LoginForm = (props: LoginFormProps) => {
             <TextField
               type="password"
               label="Password"
+              placeholder="Your Password"
               fullWidth
               autoComplete="password"
               {...field}

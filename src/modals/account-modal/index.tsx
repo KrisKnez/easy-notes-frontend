@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import NiceModal, { muiDialog, useModal } from "@ebay/nice-modal-react";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,7 +14,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdPassword, MdSaveAlt } from "react-icons/md";
 import {
   getUsersMeControllerMeQueryKey,
   useUsersMeControllerMe,
@@ -33,33 +34,55 @@ export const AccountFormFieldsSchema = z.object({
 
 export type AccountFormFields = z.infer<typeof AccountFormFieldsSchema>;
 
-export const useAccountForm = () =>
-  useForm<AccountFormFields>({
-    resolver: zodResolver(AccountFormFieldsSchema),
-  });
-
 export interface AccountModalProps {}
 
 const AccountModal = NiceModal.create((props: AccountModalProps) => {
   const modal = useModal();
-  const queryClient = useQueryClient();
 
-  const { control, handleSubmit, formState, reset } = useAccountForm();
+  const queryClient = useQueryClient();
 
   const { data } = useUsersMeControllerMe({
     axios: axiosConfig,
+    query: {
+      refetchOnWindowFocus: false,
+    },
   });
 
-  // useEffect(() => {
-  //   if (data)
-  //     reset({
-  //       name: data.data.name || "",
-  //       bio: data.data.bio || "",
-  //     });
-  // }, [data, reset]);
+  const { control, handleSubmit, formState, reset } =
+    useForm<AccountFormFields>({
+      resolver: zodResolver(AccountFormFieldsSchema),
+      defaultValues: {
+        name: "",
+        bio: "",
+      },
+    });
+
+  // set defaultValues after query is complete
+  const [isReset, setIsReset] = useState(false);
+  useEffect(() => {
+    if (!isReset && data) {
+      reset({
+        name: data.data.name || "",
+        bio: data.data.bio || "",
+      });
+      setIsReset(true);
+    }
+  }, [data, isReset, reset]);
 
   const usersMeUpdateMe = useUsersMeControllerUpdateMe({
     axios: axiosConfig,
+    mutation: {
+      onSuccess(data) {
+        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
+
+        reset({
+          name: data.data.name || "",
+          bio: data.data.bio || "",
+        });
+      },
+      // Simulate delay
+      onMutate: () => new Promise((resolve) => setTimeout(resolve, 750)),
+    },
   });
 
   return (
@@ -67,16 +90,11 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
       component="form"
       fullWidth
       {...muiDialog(modal)}
-      onSubmit={handleSubmit((data) =>
-        usersMeUpdateMe.mutateAsync(
-          { data },
-          {
-            onSuccess(data) {
-              queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
-            },
-          }
-        )
-      )}
+      // Restart state of modal after close
+      onTransitionExited={modal.remove}
+      onSubmit={handleSubmit((data) => {
+        usersMeUpdateMe.mutateAsync({ data });
+      })}
     >
       <DialogTitle>
         <Stack
@@ -147,11 +165,25 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
             variant="outlined"
             color="warning"
             onClick={() => NiceModal.show(ChangePasswordModal)}
+            endIcon={<MdPassword />}
           >
             Change Password
           </Button>
         </Stack>
-        <Button type="submit" variant="contained" disabled={!formState.isValid}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={
+            !formState.isValid ||
+            !formState.isDirty ||
+            usersMeUpdateMe.isLoading
+          }
+          endIcon={
+            (usersMeUpdateMe.isLoading && (
+              <CircularProgress size="1em" color="inherit" />
+            )) || <MdSaveAlt />
+          }
+        >
           Save
         </Button>
       </DialogActions>

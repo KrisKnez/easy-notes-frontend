@@ -11,6 +11,8 @@ const useLoginMutation = () => {
       onSuccess(data) {
         queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
       },
+      // Simulate delay
+      onMutate: () => new Promise((resolve) => setTimeout(resolve, 750)),
     },
   });
 };

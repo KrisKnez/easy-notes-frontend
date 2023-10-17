@@ -39,6 +39,7 @@ export interface AccountModalProps {}
 
 const AccountModal = NiceModal.create((props: AccountModalProps) => {
   const modal = useModal();
+  const { onExited, ...muiDialogProps } = muiDialog(modal);
 
   const queryClient = useQueryClient();
 
@@ -92,7 +93,7 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
     <Dialog
       component="form"
       fullWidth
-      {...muiDialog(modal)}
+      {...muiDialogProps}
       // Restart state of modal after close
       onTransitionExited={modal.remove}
       onSubmit={handleSubmit((data) => {

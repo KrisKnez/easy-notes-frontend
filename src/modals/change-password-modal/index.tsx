@@ -21,9 +21,10 @@ export interface ChangePasswordModalProps {}
 const ChangePasswordModal = NiceModal.create(
   (props: ChangePasswordModalProps) => {
     const modal = useModal();
+    const { onExited, ...muiDialogProps } = muiDialog(modal);
 
     return (
-      <Dialog {...muiDialog(modal)} maxWidth="xs">
+      <Dialog {...muiDialogProps} maxWidth="xs">
         <DialogTitle>
           <Stack
             direction="row"

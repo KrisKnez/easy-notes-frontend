@@ -9,7 +9,11 @@ const useLogoutMutation = () => {
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
-        queryClient.refetchQueries(getUsersMeControllerMeQueryKey());
+        // This will trigger auth component to consider the user logged out
+        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), null);
+
+        // This will delete all cached data so when a new user logs there is no possibility of stale data
+        queryClient.invalidateQueries();
       },
       // Simulate delay
       onMutate: () => new Promise((resolve) => setTimeout(resolve, 750)),

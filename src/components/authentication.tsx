@@ -5,6 +5,7 @@ import { NextPageWithLayout } from "@/pages/_app";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export interface AuthenticationProps {
   children: ReactNode;
@@ -16,33 +17,20 @@ const Authentication = (props: AuthenticationProps) => {
 
   const router = useRouter();
 
-  // Persisted error is error which is present until a successful response is received.
-  // Usually error is present until start of retry which is not ideal for us and will cause flicker.
-  const [persistedError, setPersistedError] = useState<
-    AxiosError | undefined
-  >();
-
-  const { data, error, status } = useUsersMeControllerMe({
+  const { data, error, isLoading, isError } = useUsersMeControllerMe({
     axios: axiosConfig,
     query: {
       retry: false,
     },
   });
+
   useEffect(() => {
-    switch (status) {
-      case "error":
-        setPersistedError(error);
-        break;
-      case "success":
-        setPersistedError(undefined);
-        break;
-    }
-  }, [status, error]);
+    if (isError) toast.error(error.message);
+  }, [error, isError]);
 
-  if (!data && !persistedError) return <LoadingLayout />;
+  if (isLoading) return <LoadingLayout />;
 
-  const isAuthn = persistedError?.response?.status !== 401;
-
+  const isAuthn = !!data?.data;
   if (!page.authn)
     if (isAuthn) {
       router.push("/dashboard");

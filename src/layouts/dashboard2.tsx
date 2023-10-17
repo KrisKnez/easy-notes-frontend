@@ -140,8 +140,7 @@ const Dashboard2Layout = (props: Dashboard2LayoutProps) => {
               >
                 {(logoutMutation.isLoading && (
                   <CircularProgress size="1em" color="inherit" />
-                )) ||
-                  (logoutMutation.isSuccess && <MdCheck />) || <MdLogout />}
+                )) || <MdLogout />}
               </IconButton>
             </Tooltip>
           </Stack>

@@ -1,16 +1,15 @@
 import React from "react";
 import { NextPageWithLayout } from "../_app";
-import DashboardLayout from "@/layouts/dashboard";
 import Dashboard2Layout from "@/layouts/dashboard2";
 import { Grid, Stack } from "@mui/material";
 import NoteCard from "@/components/note-card";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  getUsersNotesControllerFindAllUserNotesQueryKey,
-  useUsersNotesControllerCreateUserNote,
-  useUsersNotesControllerFindAllUserNotes,
-  useUsersNotesControllerRemoveUserNote,
-  useUsersNotesControllerUpdateUserNote,
+  getUsersMeNotesControllerFindAllUserNotesQueryKey,
+  useUsersMeNotesControllerCreateUserNote,
+  useUsersMeNotesControllerFindAllUserNotes,
+  useUsersMeNotesControllerRemoveUserNote,
+  useUsersMeNotesControllerUpdateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import { toast } from "react-hot-toast";
@@ -20,7 +19,7 @@ const NotesPage: NextPageWithLayout = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useUsersNotesControllerFindAllUserNotes({
+  const { data } = useUsersMeNotesControllerFindAllUserNotes({
     axios: axiosConfig,
     query: {
       retry(failureCount, error) {
@@ -32,32 +31,32 @@ const NotesPage: NextPageWithLayout = () => {
   });
 
   // Mutations
-  const createUserNote = useUsersNotesControllerCreateUserNote({
+  const createUsersMeNote = useUsersMeNotesControllerCreateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersNotesControllerFindAllUserNotesQueryKey()
+          getUsersMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const removeUserNote = useUsersNotesControllerRemoveUserNote({
+  const removeUsersMeNote = useUsersMeNotesControllerRemoveUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersNotesControllerFindAllUserNotesQueryKey()
+          getUsersMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const updateUserNote = useUsersNotesControllerUpdateUserNote({
+  const updateUsersMeNotes = useUsersMeNotesControllerUpdateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersNotesControllerFindAllUserNotesQueryKey()
+          getUsersMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
@@ -67,7 +66,7 @@ const NotesPage: NextPageWithLayout = () => {
     <Stack width="100%" alignItems="center" spacing={4}>
       <NoteCard
         onSave={(data) =>
-          createUserNote
+          createUsersMeNote
             .mutateAsync({
               data,
             })
@@ -85,7 +84,7 @@ const NotesPage: NextPageWithLayout = () => {
               }}
               data={{ title: note.title, content: note.content }}
               onSave={(data) =>
-                updateUserNote
+                updateUsersMeNotes
                   .mutateAsync({
                     id: note.id.toString(),
                     data: {
@@ -97,7 +96,7 @@ const NotesPage: NextPageWithLayout = () => {
                   .catch(() => toast.error("Error updating note"))
               }
               onDelete={() =>
-                removeUserNote
+                removeUsersMeNote
                   .mutateAsync({
                     id: note.id.toString(),
                   })
@@ -113,7 +112,6 @@ const NotesPage: NextPageWithLayout = () => {
 };
 
 NotesPage.getLayout = (page) => {
-  // return <DashboardLayout title="Notes">{page}</DashboardLayout>;
   return <Dashboard2Layout>{page}</Dashboard2Layout>;
 };
 

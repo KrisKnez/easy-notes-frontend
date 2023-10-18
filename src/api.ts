@@ -71,6 +71,12 @@ export interface CreateUserDto {
   bio?: string;
 }
 
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
+}
+
 export interface UpdateUserDto {
   email?: string;
   password?: string;
@@ -103,7 +109,15 @@ export interface RetrieveContactDto {
   userId: number;
 }
 
-export interface CreateUserContactDto { [key: string]: any }
+export interface CreateUserContactDto {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  instagram?: string;
+  note?: string;
+}
 
 export interface UpdateNoteDto {
   title?: string;
@@ -282,11 +296,237 @@ export const getAuthControllerLogoutMutationOptions = <TError = AxiosError<unkno
       return useMutation(mutationOptions);
     }
     
-export const usersNotesControllerCreateUserNote = (
+export const usersMeNotesControllerCreateUserNote = (
     createUserNoteDto: CreateUserNoteDto, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<RetrieveNoteDto>> => {
     return axios.post(
-      `/users/notes`,
+      `/users/me/notes`,
+      createUserNoteDto,options
+    );
+  }
+
+
+
+export const getUsersMeNotesControllerCreateUserNoteMutationOptions = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext> => {
+ const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersMeNotesControllerCreateUserNote>>, {data: CreateUserNoteDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  usersMeNotesControllerCreateUserNote(data,axiosOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UsersMeNotesControllerCreateUserNoteMutationResult = NonNullable<Awaited<ReturnType<typeof usersMeNotesControllerCreateUserNote>>>
+    export type UsersMeNotesControllerCreateUserNoteMutationBody = CreateUserNoteDto
+    export type UsersMeNotesControllerCreateUserNoteMutationError = AxiosError<unknown>
+
+    export const useUsersMeNotesControllerCreateUserNote = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
+) => {
+    
+      const mutationOptions = getUsersMeNotesControllerCreateUserNoteMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const usersMeNotesControllerFindAllUserNotes = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveNoteDto[]>> => {
+    return axios.get(
+      `/users/me/notes`,options
+    );
+  }
+
+
+export const getUsersMeNotesControllerFindAllUserNotesQueryKey = () => [`/users/me/notes`] as const;
+  
+
+    
+export const getUsersMeNotesControllerFindAllUserNotesQueryOptions = <TData = Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>, TError = AxiosError<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
+): UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>, TError, TData> & { queryKey: QueryKey } => {
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUsersMeNotesControllerFindAllUserNotesQueryKey();
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>> = ({ signal }) => usersMeNotesControllerFindAllUserNotes({ signal, ...axiosOptions });
+    
+      
+      
+   return  { queryKey, queryFn, ...queryOptions}}
+
+export type UsersMeNotesControllerFindAllUserNotesQueryResult = NonNullable<Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>>
+export type UsersMeNotesControllerFindAllUserNotesQueryError = AxiosError<unknown>
+
+export const useUsersMeNotesControllerFindAllUserNotes = <TData = Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>, TError = AxiosError<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getUsersMeNotesControllerFindAllUserNotesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const usersMeNotesControllerFindOneUserNote = (
+    id: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveNoteDto>> => {
+    return axios.get(
+      `/users/me/notes/${id}`,options
+    );
+  }
+
+
+export const getUsersMeNotesControllerFindOneUserNoteQueryKey = (id: string,) => [`/users/me/notes/${id}`] as const;
+  
+
+    
+export const getUsersMeNotesControllerFindOneUserNoteQueryOptions = <TData = Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>, TError = AxiosError<unknown>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
+): UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>, TError, TData> & { queryKey: QueryKey } => {
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUsersMeNotesControllerFindOneUserNoteQueryKey(id);
+
+  
+  
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>> = ({ signal }) => usersMeNotesControllerFindOneUserNote(id, { signal, ...axiosOptions });
+    
+      
+      
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions}}
+
+export type UsersMeNotesControllerFindOneUserNoteQueryResult = NonNullable<Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>>
+export type UsersMeNotesControllerFindOneUserNoteQueryError = AxiosError<unknown>
+
+export const useUsersMeNotesControllerFindOneUserNote = <TData = Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>, TError = AxiosError<unknown>>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersMeNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getUsersMeNotesControllerFindOneUserNoteQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+export const usersMeNotesControllerUpdateUserNote = (
+    id: string,
+    updateNoteDto: UpdateNoteDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveNoteDto>> => {
+    return axios.patch(
+      `/users/me/notes/${id}`,
+      updateNoteDto,options
+    );
+  }
+
+
+
+export const getUsersMeNotesControllerUpdateUserNoteMutationOptions = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext> => {
+ const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersMeNotesControllerUpdateUserNote>>, {id: string;data: UpdateNoteDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  usersMeNotesControllerUpdateUserNote(id,data,axiosOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UsersMeNotesControllerUpdateUserNoteMutationResult = NonNullable<Awaited<ReturnType<typeof usersMeNotesControllerUpdateUserNote>>>
+    export type UsersMeNotesControllerUpdateUserNoteMutationBody = UpdateNoteDto
+    export type UsersMeNotesControllerUpdateUserNoteMutationError = AxiosError<unknown>
+
+    export const useUsersMeNotesControllerUpdateUserNote = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
+) => {
+    
+      const mutationOptions = getUsersMeNotesControllerUpdateUserNoteMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const usersMeNotesControllerRemoveUserNote = (
+    id: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveNoteDto>> => {
+    return axios.delete(
+      `/users/me/notes/${id}`,options
+    );
+  }
+
+
+
+export const getUsersMeNotesControllerRemoveUserNoteMutationOptions = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerRemoveUserNote>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerRemoveUserNote>>, TError,{id: string}, TContext> => {
+ const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersMeNotesControllerRemoveUserNote>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  usersMeNotesControllerRemoveUserNote(id,axiosOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UsersMeNotesControllerRemoveUserNoteMutationResult = NonNullable<Awaited<ReturnType<typeof usersMeNotesControllerRemoveUserNote>>>
+    
+    export type UsersMeNotesControllerRemoveUserNoteMutationError = AxiosError<unknown>
+
+    export const useUsersMeNotesControllerRemoveUserNote = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeNotesControllerRemoveUserNote>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+) => {
+    
+      const mutationOptions = getUsersMeNotesControllerRemoveUserNoteMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const usersNotesControllerCreateUserNote = (
+    userId: string,
+    createUserNoteDto: CreateUserNoteDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveNoteDto>> => {
+    return axios.post(
+      `/users/${userId}/notes`,
       createUserNoteDto,options
     );
   }
@@ -295,17 +535,17 @@ export const usersNotesControllerCreateUserNote = (
 
 export const getUsersNotesControllerCreateUserNoteMutationOptions = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{userId: string;data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{userId: string;data: CreateUserNoteDto}, TContext> => {
  const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, {data: CreateUserNoteDto}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, {userId: string;data: CreateUserNoteDto}> = (props) => {
+          const {userId,data} = props ?? {};
 
-          return  usersNotesControllerCreateUserNote(data,axiosOptions)
+          return  usersNotesControllerCreateUserNote(userId,data,axiosOptions)
         }
 
         
@@ -319,7 +559,7 @@ export const getUsersNotesControllerCreateUserNoteMutationOptions = <TError = Ax
 
     export const useUsersNotesControllerCreateUserNote = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerCreateUserNote>>, TError,{userId: string;data: CreateUserNoteDto}, TContext>, axios?: AxiosRequestConfig}
 ) => {
     
       const mutationOptions = getUsersNotesControllerCreateUserNoteMutationOptions(options);
@@ -328,41 +568,41 @@ export const getUsersNotesControllerCreateUserNoteMutationOptions = <TError = Ax
     }
     
 export const usersNotesControllerFindAllUserNotes = (
-     options?: AxiosRequestConfig
+    userId: string, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<RetrieveNoteDto[]>> => {
     return axios.get(
-      `/users/notes`,options
+      `/users/${userId}/notes`,options
     );
   }
 
 
-export const getUsersNotesControllerFindAllUserNotesQueryKey = () => [`/users/notes`] as const;
+export const getUsersNotesControllerFindAllUserNotesQueryKey = (userId: string,) => [`/users/${userId}/notes`] as const;
   
 
     
-export const getUsersNotesControllerFindAllUserNotesQueryOptions = <TData = Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError = AxiosError<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
+export const getUsersNotesControllerFindAllUserNotesQueryOptions = <TData = Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError = AxiosError<unknown>>(userId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
 ): UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError, TData> & { queryKey: QueryKey } => {
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getUsersNotesControllerFindAllUserNotesQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getUsersNotesControllerFindAllUserNotesQueryKey(userId);
 
   
   
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>> = ({ signal }) => usersNotesControllerFindAllUserNotes({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>> = ({ signal }) => usersNotesControllerFindAllUserNotes(userId, { signal, ...axiosOptions });
     
       
       
-   return  { queryKey, queryFn, ...queryOptions}}
+   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions}}
 
 export type UsersNotesControllerFindAllUserNotesQueryResult = NonNullable<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>>
 export type UsersNotesControllerFindAllUserNotesQueryError = AxiosError<unknown>
 
 export const useUsersNotesControllerFindAllUserNotes = <TData = Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError = AxiosError<unknown>>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
+ userId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindAllUserNotes>>, TError, TData>, axios?: AxiosRequestConfig}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getUsersNotesControllerFindAllUserNotesQueryOptions(options)
+  const queryOptions = getUsersNotesControllerFindAllUserNotesQueryOptions(userId,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -373,41 +613,45 @@ export const useUsersNotesControllerFindAllUserNotes = <TData = Awaited<ReturnTy
 
 
 export const usersNotesControllerFindOneUserNote = (
+    userId: string,
     id: string, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<RetrieveNoteDto>> => {
     return axios.get(
-      `/users/notes/${id}`,options
+      `/users/${userId}/notes/${id}`,options
     );
   }
 
 
-export const getUsersNotesControllerFindOneUserNoteQueryKey = (id: string,) => [`/users/notes/${id}`] as const;
+export const getUsersNotesControllerFindOneUserNoteQueryKey = (userId: string,
+    id: string,) => [`/users/${userId}/notes/${id}`] as const;
   
 
     
-export const getUsersNotesControllerFindOneUserNoteQueryOptions = <TData = Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError = AxiosError<unknown>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
+export const getUsersNotesControllerFindOneUserNoteQueryOptions = <TData = Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError = AxiosError<unknown>>(userId: string,
+    id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
 ): UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError, TData> & { queryKey: QueryKey } => {
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getUsersNotesControllerFindOneUserNoteQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getUsersNotesControllerFindOneUserNoteQueryKey(userId,id);
 
   
   
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>> = ({ signal }) => usersNotesControllerFindOneUserNote(id, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>> = ({ signal }) => usersNotesControllerFindOneUserNote(userId,id, { signal, ...axiosOptions });
     
       
       
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions}}
+   return  { queryKey, queryFn, enabled: !!(userId && id), ...queryOptions}}
 
 export type UsersNotesControllerFindOneUserNoteQueryResult = NonNullable<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>>
 export type UsersNotesControllerFindOneUserNoteQueryError = AxiosError<unknown>
 
 export const useUsersNotesControllerFindOneUserNote = <TData = Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError = AxiosError<unknown>>(
- id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
+ userId: string,
+    id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof usersNotesControllerFindOneUserNote>>, TError, TData>, axios?: AxiosRequestConfig}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getUsersNotesControllerFindOneUserNoteQueryOptions(id,options)
+  const queryOptions = getUsersNotesControllerFindOneUserNoteQueryOptions(userId,id,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -418,11 +662,12 @@ export const useUsersNotesControllerFindOneUserNote = <TData = Awaited<ReturnTyp
 
 
 export const usersNotesControllerUpdateUserNote = (
+    userId: string,
     id: string,
     updateNoteDto: UpdateNoteDto, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<RetrieveNoteDto>> => {
     return axios.patch(
-      `/users/notes/${id}`,
+      `/users/${userId}/notes/${id}`,
       updateNoteDto,options
     );
   }
@@ -431,17 +676,17 @@ export const usersNotesControllerUpdateUserNote = (
 
 export const getUsersNotesControllerUpdateUserNoteMutationOptions = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{userId: string;id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{userId: string;id: string;data: UpdateNoteDto}, TContext> => {
  const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, {id: string;data: UpdateNoteDto}> = (props) => {
-          const {id,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, {userId: string;id: string;data: UpdateNoteDto}> = (props) => {
+          const {userId,id,data} = props ?? {};
 
-          return  usersNotesControllerUpdateUserNote(id,data,axiosOptions)
+          return  usersNotesControllerUpdateUserNote(userId,id,data,axiosOptions)
         }
 
         
@@ -455,7 +700,7 @@ export const getUsersNotesControllerUpdateUserNoteMutationOptions = <TError = Ax
 
     export const useUsersNotesControllerUpdateUserNote = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerUpdateUserNote>>, TError,{userId: string;id: string;data: UpdateNoteDto}, TContext>, axios?: AxiosRequestConfig}
 ) => {
     
       const mutationOptions = getUsersNotesControllerUpdateUserNoteMutationOptions(options);
@@ -464,10 +709,11 @@ export const getUsersNotesControllerUpdateUserNoteMutationOptions = <TError = Ax
     }
     
 export const usersNotesControllerRemoveUserNote = (
+    userId: string,
     id: string, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<RetrieveNoteDto>> => {
     return axios.delete(
-      `/users/notes/${id}`,options
+      `/users/${userId}/notes/${id}`,options
     );
   }
 
@@ -475,17 +721,17 @@ export const usersNotesControllerRemoveUserNote = (
 
 export const getUsersNotesControllerRemoveUserNoteMutationOptions = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{id: string}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{userId: string;id: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{userId: string;id: string}, TContext> => {
  const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, {userId: string;id: string}> = (props) => {
+          const {userId,id} = props ?? {};
 
-          return  usersNotesControllerRemoveUserNote(id,axiosOptions)
+          return  usersNotesControllerRemoveUserNote(userId,id,axiosOptions)
         }
 
         
@@ -499,7 +745,7 @@ export const getUsersNotesControllerRemoveUserNoteMutationOptions = <TError = Ax
 
     export const useUsersNotesControllerRemoveUserNote = <TError = AxiosError<unknown>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersNotesControllerRemoveUserNote>>, TError,{userId: string;id: string}, TContext>, axios?: AxiosRequestConfig}
 ) => {
     
       const mutationOptions = getUsersNotesControllerRemoveUserNoteMutationOptions(options);
@@ -818,6 +1064,51 @@ export const getUsersMeControllerUpdateMeMutationOptions = <TError = AxiosError<
 ) => {
     
       const mutationOptions = getUsersMeControllerUpdateMeMutationOptions(options);
+     
+      return useMutation(mutationOptions);
+    }
+    
+export const usersMeControllerChangePassword = (
+    changePasswordDto: ChangePasswordDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RetrieveUserDto>> => {
+    return axios.post(
+      `/users/me/change-password`,
+      changePasswordDto,options
+    );
+  }
+
+
+
+export const getUsersMeControllerChangePasswordMutationOptions = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeControllerChangePassword>>, TError,{data: ChangePasswordDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof usersMeControllerChangePassword>>, TError,{data: ChangePasswordDto}, TContext> => {
+ const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersMeControllerChangePassword>>, {data: ChangePasswordDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  usersMeControllerChangePassword(data,axiosOptions)
+        }
+
+        
+
+ 
+   return  { mutationFn, ...mutationOptions }}
+
+    export type UsersMeControllerChangePasswordMutationResult = NonNullable<Awaited<ReturnType<typeof usersMeControllerChangePassword>>>
+    export type UsersMeControllerChangePasswordMutationBody = ChangePasswordDto
+    export type UsersMeControllerChangePasswordMutationError = AxiosError<unknown>
+
+    export const useUsersMeControllerChangePassword = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersMeControllerChangePassword>>, TError,{data: ChangePasswordDto}, TContext>, axios?: AxiosRequestConfig}
+) => {
+    
+      const mutationOptions = getUsersMeControllerChangePasswordMutationOptions(options);
      
       return useMutation(mutationOptions);
     }

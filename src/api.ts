@@ -37,7 +37,7 @@ userId?: number;
 export type NotesControllerFindAllOrderByItem = typeof NotesControllerFindAllOrderByItem[keyof typeof NotesControllerFindAllOrderByItem];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+// // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const NotesControllerFindAllOrderByItem = {
   'id:asc': 'id:asc',
   'id:desc': 'id:desc',
@@ -73,7 +73,7 @@ name?: string;
 export type MeNotesControllerFindAllUserNotesOrderByItem = typeof MeNotesControllerFindAllUserNotesOrderByItem[keyof typeof MeNotesControllerFindAllUserNotesOrderByItem];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+// // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MeNotesControllerFindAllUserNotesOrderByItem = {
   'id:asc': 'id:asc',
   'id:desc': 'id:desc',

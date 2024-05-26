@@ -1,6 +1,6 @@
 import {
-  getUsersMeNotesControllerFindAllUserNotesQueryKey,
-  useUsersMeNotesControllerCreateUserNote,
+  getMeNotesControllerFindAllUserNotesQueryKey,
+  useMeNotesControllerCreateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import NoteCard from "@/components/note-card2";
@@ -21,12 +21,12 @@ const NotesPage: NextPageWithLayout = (props: Props) => {
   const queryClient = useQueryClient();
 
   // Mutations
-  const createUsersMeNote = useUsersMeNotesControllerCreateUserNote({
+  const createMeNote = useMeNotesControllerCreateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
@@ -35,7 +35,7 @@ const NotesPage: NextPageWithLayout = (props: Props) => {
   return (
     <NoteCard
       onSave={(data) =>
-        createUsersMeNote
+        createMeNote
           .mutateAsync({
             data,
           })

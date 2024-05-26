@@ -1,4 +1,4 @@
-import { useUsersMeControllerMe } from "@/api";
+import { useMeControllerMe } from "@/api";
 import { axiosConfig } from "@/axios";
 import LoadingLayout from "@/layouts/loading";
 import { NextPageWithLayout } from "@/pages/_app";
@@ -17,7 +17,7 @@ const Authentication = (props: AuthenticationProps) => {
 
   const router = useRouter();
 
-  const { data, error, isLoading, isError } = useUsersMeControllerMe({
+  const { data, error, isLoading, isError } = useMeControllerMe({
     axios: axiosConfig,
     query: {
       retry: false,

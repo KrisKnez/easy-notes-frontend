@@ -7,11 +7,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { axiosConfig } from "@/axios";
 import toast from "react-hot-toast";
 import {
-  getUsersContactsControllerFindAllUserContactsQueryKey,
-  useUsersContactsControllerCreateUserContact,
-  useUsersContactsControllerFindAllUserContacts,
-  useUsersContactsControllerRemoveUserContact,
-  useUsersContactsControllerUpdateUserContact,
+  getMeContactsControllerFindAllUserContactsQueryKey,
+  useMeContactsControllerCreateUserContact,
+  useMeContactsControllerFindAllUserContacts,
+  useMeContactsControllerRemoveUserContact,
+  useMeContactsControllerUpdateUserContact,
 } from "@/api";
 import Dashboard2Layout from "@/layouts/dashboard2";
 
@@ -20,7 +20,7 @@ const ContactsPage: NextPageWithLayout = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useUsersContactsControllerFindAllUserContacts({
+  const { data } = useMeContactsControllerFindAllUserContacts({
     axios: axiosConfig,
     query: {
       retry(failureCount, error) {
@@ -32,32 +32,32 @@ const ContactsPage: NextPageWithLayout = () => {
   });
 
   // Mutations
-  const createUserContact = useUsersContactsControllerCreateUserContact({
+  const createUserContact = useMeContactsControllerCreateUserContact({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersContactsControllerFindAllUserContactsQueryKey()
+          getMeContactsControllerFindAllUserContactsQueryKey()
         );
       },
     },
   });
-  const removeUserContact = useUsersContactsControllerRemoveUserContact({
+  const removeUserContact = useMeContactsControllerRemoveUserContact({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersContactsControllerFindAllUserContactsQueryKey()
+          getMeContactsControllerFindAllUserContactsQueryKey()
         );
       },
     },
   });
-  const updateUserContact = useUsersContactsControllerUpdateUserContact({
+  const updateUserContact = useMeContactsControllerUpdateUserContact({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersContactsControllerFindAllUserContactsQueryKey()
+          getMeContactsControllerFindAllUserContactsQueryKey()
         );
       },
     },

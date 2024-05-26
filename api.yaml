@@ -13,7 +13,7 @@ paths:
       responses:
         '201':
           description: ''
-      tags: &ref_0
+      tags:
         - auth
   /auth/register:
     post:
@@ -28,7 +28,8 @@ paths:
       responses:
         '201':
           description: ''
-      tags: *ref_0
+      tags:
+        - auth
   /auth/logout:
     post:
       operationId: AuthController_logout
@@ -39,11 +40,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_0
-  /users/me/notes:
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - auth
+  /auth/change-password:
     post:
-      operationId: UsersMeNotesController_createUserNote
+      operationId: AuthController_ChangePassword
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - auth
+  /me:
+    get:
+      operationId: MeController_me
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - me
+    patch:
+      operationId: MeController_updateMe
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - me
+  /me/notes:
+    post:
+      operationId: MeNotesController_createUserNote
       parameters: []
       requestBody:
         required: true
@@ -57,28 +109,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: &ref_1
-        - users-me-notes
+                $ref: '#/components/schemas/NoteDto'
+      tags:
+        - me-notes
     get:
-      operationId: UsersMeNotesController_findAllUserNotes
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_1
-  /users/me/notes/search:
-    get:
-      operationId: UsersMeNotesController_searchUserNotes
+      operationId: MeNotesController_findAllUserNotes
       parameters:
-        - name: term
-          required: true
+        - name: orderBy
+          required: false
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - id:asc
+                - id:desc
+                - title:asc
+                - title:desc
+                - content:asc
+                - content:desc
+                - createdAt:asc
+                - createdAt:desc
+                - updatedAt:asc
+                - updatedAt:desc
+                - userId:asc
+                - userId:desc
+        - name: idEquals
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: titleEquals
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: titleContains
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: titleStartsWith
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: titleEndsWith
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: search
+          required: false
           in: query
           schema:
             type: string
@@ -90,11 +173,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_1
-  /users/me/notes/{id}:
+                  $ref: '#/components/schemas/NoteDto'
+      tags:
+        - me-notes
+  /me/notes/{id}:
     get:
-      operationId: UsersMeNotesController_findOneUserNote
+      operationId: MeNotesController_findOneUserNote
       parameters:
         - name: id
           required: true
@@ -107,10 +191,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_1
+                $ref: '#/components/schemas/NoteDto'
+      tags:
+        - me-notes
     patch:
-      operationId: UsersMeNotesController_updateUserNote
+      operationId: MeNotesController_updateUserNote
       parameters:
         - name: id
           required: true
@@ -129,10 +214,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_1
+                $ref: '#/components/schemas/NoteDto'
+      tags:
+        - me-notes
     delete:
-      operationId: UsersMeNotesController_removeUserNote
+      operationId: MeNotesController_removeUserNote
       parameters:
         - name: id
           required: true
@@ -145,11 +231,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_1
-  /users/contacts:
+                $ref: '#/components/schemas/NoteDto'
+      tags:
+        - me-notes
+  /me/contacts:
     post:
-      operationId: UsersContactsController_createUserContact
+      operationId: MeContactsController_createUserContact
       parameters: []
       requestBody:
         required: true
@@ -164,10 +251,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: &ref_2
-        - users-contacts
+      tags:
+        - me-contacts
     get:
-      operationId: UsersContactsController_findAllUserContacts
+      operationId: MeContactsController_findAllUserContacts
       parameters: []
       responses:
         '200':
@@ -178,10 +265,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_2
-  /users/contacts/{id}:
+      tags:
+        - me-contacts
+  /me/contacts/{id}:
     get:
-      operationId: UsersContactsController_findOneUserContact
+      operationId: MeContactsController_findOneUserContact
       parameters:
         - name: id
           required: true
@@ -195,9 +283,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_2
+      tags:
+        - me-contacts
     patch:
-      operationId: UsersContactsController_updateUserContact
+      operationId: MeContactsController_updateUserContact
       parameters:
         - name: id
           required: true
@@ -217,9 +306,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_2
+      tags:
+        - me-contacts
     delete:
-      operationId: UsersContactsController_removeUserContact
+      operationId: MeContactsController_removeUserContact
       parameters:
         - name: id
           required: true
@@ -233,55 +323,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_2
-  /users/me:
-    get:
-      operationId: UsersMeController_me
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: &ref_3
-        - users-me
-    patch:
-      operationId: UsersMeController_updateMe
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUserDto'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_3
-  /users/me/change-password:
-    post:
-      operationId: UsersMeController_ChangePassword
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangePasswordDto'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_3
+      tags:
+        - me-contacts
   /users:
     post:
       operationId: UsersController_create
@@ -298,8 +341,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: &ref_4
+                $ref: '#/components/schemas/UserDto'
+      tags:
         - users
     get:
       operationId: UsersController_findAll
@@ -327,8 +370,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_4
+                  $ref: '#/components/schemas/UserDto'
+      tags:
+        - users
   /users/{id}:
     get:
       operationId: UsersController_findOne
@@ -344,8 +388,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_4
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - users
     patch:
       operationId: UsersController_update
       parameters:
@@ -366,8 +411,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_4
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - users
     delete:
       operationId: UsersController_remove
       parameters:
@@ -382,8 +428,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveUserDto'
-      tags: *ref_4
+                $ref: '#/components/schemas/UserDto'
+      tags:
+        - users
   /notes:
     post:
       operationId: NotesController_create
@@ -397,31 +444,66 @@ paths:
       responses:
         '201':
           description: ''
-      tags: &ref_5
+      tags:
         - notes
     get:
       operationId: NotesController_findAll
       parameters:
-        - name: id
+        - name: orderBy
+          required: false
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - id:asc
+                - id:desc
+                - title:asc
+                - title:desc
+                - content:asc
+                - content:desc
+                - createdAt:asc
+                - createdAt:desc
+                - updatedAt:asc
+                - updatedAt:desc
+                - userId:asc
+                - userId:desc
+        - name: idEquals
           required: false
           in: query
           schema:
             type: number
-        - name: title
+        - name: titleEquals
           required: false
           in: query
           schema:
             type: string
-        - name: content
+        - name: titleContains
           required: false
           in: query
           schema:
             type: string
-        - name: userId
+        - name: titleStartsWith
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: titleEndsWith
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: userIdEquals
           required: false
           in: query
           schema:
             type: number
+        - name: search
+          required: false
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -430,8 +512,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_5
+                  $ref: '#/components/schemas/NoteDto'
+      tags:
+        - notes
   /notes/{id}:
     get:
       operationId: NotesController_findOne
@@ -447,8 +530,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveNoteDto'
-      tags: *ref_5
+                $ref: '#/components/schemas/NoteDto'
+      tags:
+        - notes
     patch:
       operationId: NotesController_update
       parameters:
@@ -466,7 +550,8 @@ paths:
       responses:
         '200':
           description: ''
-      tags: *ref_5
+      tags:
+        - notes
     delete:
       operationId: NotesController_remove
       parameters:
@@ -478,7 +563,8 @@ paths:
       responses:
         '200':
           description: ''
-      tags: *ref_5
+      tags:
+        - notes
   /contacts:
     post:
       operationId: ContactsController_create
@@ -496,7 +582,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: &ref_6
+      tags:
         - contacts
     get:
       operationId: ContactsController_findAll
@@ -550,7 +636,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_6
+      tags:
+        - contacts
   /contacts/{id}:
     get:
       operationId: ContactsController_findOne
@@ -567,7 +654,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_6
+      tags:
+        - contacts
     patch:
       operationId: ContactsController_update
       parameters:
@@ -589,7 +677,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_6
+      tags:
+        - contacts
     delete:
       operationId: ContactsController_remove
       parameters:
@@ -605,7 +694,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RetrieveContactDto'
-      tags: *ref_6
+      tags:
+        - contacts
 info:
   title: EasyNotes API
   description: Documentation for EasyNotes API
@@ -635,14 +725,12 @@ components:
       required:
         - email
         - password
-    RetrieveUserDto:
+    UserDto:
       type: object
       properties:
         id:
           type: number
         email:
-          type: string
-        password:
           type: string
         name:
           type: string
@@ -657,11 +745,31 @@ components:
       required:
         - id
         - email
-        - password
         - name
         - bio
         - createdAt
         - updatedAt
+    ChangePasswordDto:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - currentPassword
+        - newPassword
+    UpdateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        bio:
+          type: string
     CreateUserNoteDto:
       type: object
       properties:
@@ -672,7 +780,7 @@ components:
       required:
         - title
         - content
-    RetrieveNoteDto:
+    NoteDto:
       type: object
       properties:
         id:
@@ -781,30 +889,6 @@ components:
           type: string
         userId:
           type: number
-    UpdateUserDto:
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-        name:
-          type: string
-        bio:
-          type: string
-    ChangePasswordDto:
-      type: object
-      properties:
-        currentPassword:
-          type: string
-        newPassword:
-          type: string
-        repeatNewPassword:
-          type: string
-      required:
-        - currentPassword
-        - newPassword
-        - repeatNewPassword
     CreateUserDto:
       type: object
       properties:

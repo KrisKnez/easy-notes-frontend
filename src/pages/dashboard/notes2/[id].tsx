@@ -1,8 +1,8 @@
 import {
-  getUsersMeNotesControllerFindAllUserNotesQueryKey,
-  getUsersMeNotesControllerFindOneUserNoteQueryKey,
-  useUsersMeNotesControllerFindOneUserNote,
-  useUsersMeNotesControllerUpdateUserNote,
+  getMeNotesControllerFindAllUserNotesQueryKey,
+  getMeNotesControllerFindOneUserNoteQueryKey,
+  useMeNotesControllerFindOneUserNote,
+  useMeNotesControllerUpdateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import NoteCard from "@/components/note-card2";
@@ -22,12 +22,12 @@ const NotesByIdPage: NextPageWithLayout = (props: Props) => {
   // Query Client
   const queryClient = useQueryClient();
 
-  const updateUsersMeNote = useUsersMeNotesControllerUpdateUserNote({
+  const updateMeNote = useMeNotesControllerUpdateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindOneUserNoteQueryKey(
+          getMeNotesControllerFindOneUserNoteQueryKey(
             router.query.id as string
           )
         );
@@ -35,7 +35,7 @@ const NotesByIdPage: NextPageWithLayout = (props: Props) => {
     },
   });
 
-  const { data } = useUsersMeNotesControllerFindOneUserNote(
+  const { data } = useMeNotesControllerFindOneUserNote(
     router.query.id as string,
     {
       axios: axiosConfig,
@@ -54,7 +54,7 @@ const NotesByIdPage: NextPageWithLayout = (props: Props) => {
         content: data?.data.content || "",
       }}
       onSave={(data) =>
-        updateUsersMeNote
+        updateMeNote
           .mutateAsync({
             id: router.query.id as string,
             data,

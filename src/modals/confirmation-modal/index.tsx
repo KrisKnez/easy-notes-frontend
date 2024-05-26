@@ -1,4 +1,4 @@
-import { useUsersMeControllerChangePassword } from "@/api";
+import { useMeControllerChangePassword } from "@/api";
 import { axiosConfig } from "@/axios";
 import getAllFieldErrorMessages from "@/utils/axios-error-handling/get-all-field-error-messages";
 import NiceModal, { muiDialog, useModal } from "@ebay/nice-modal-react";

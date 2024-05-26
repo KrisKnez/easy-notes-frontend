@@ -23,11 +23,11 @@ import Link from "next/link";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {
-  getUsersMeControllerMeQueryKey,
-  getUsersNotesControllerFindAllUserNotesQueryKey,
-  useAuthControllerLogout,
-} from "@/api";
+// import {
+//   getMeControllerMeQueryKey,
+//   getUsersNotesControllerFindAllUserNotesQueryKey,
+//   useAuthControllerLogout,
+// } from "@/api";
 import { axiosConfig } from "@/axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";

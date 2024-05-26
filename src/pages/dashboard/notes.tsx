@@ -5,11 +5,11 @@ import { Grid, Stack } from "@mui/material";
 import NoteCard from "@/components/note-card";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  getUsersMeNotesControllerFindAllUserNotesQueryKey,
-  useUsersMeNotesControllerCreateUserNote,
-  useUsersMeNotesControllerFindAllUserNotes,
-  useUsersMeNotesControllerRemoveUserNote,
-  useUsersMeNotesControllerUpdateUserNote,
+  getMeNotesControllerFindAllUserNotesQueryKey,
+  useMeNotesControllerCreateUserNote,
+  useMeNotesControllerFindAllUserNotes,
+  useMeNotesControllerRemoveUserNote,
+  useMeNotesControllerUpdateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import { toast } from "react-hot-toast";
@@ -19,44 +19,49 @@ const NotesPage: NextPageWithLayout = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useUsersMeNotesControllerFindAllUserNotes({
-    axios: axiosConfig,
-    query: {
-      retry(failureCount, error) {
-        toast.error(error.message || "Unknown Error");
-
-        return true;
-      },
+  const { data } = useMeNotesControllerFindAllUserNotes(
+    {
+      orderBy: ["updatedAt:desc"],
     },
-  });
+    {
+      axios: axiosConfig,
+      query: {
+        retry(failureCount, error) {
+          toast.error(error.message || "Unknown Error");
+
+          return true;
+        },
+      },
+    }
+  );
 
   // Mutations
-  const createUsersMeNote = useUsersMeNotesControllerCreateUserNote({
+  const createMeNote = useMeNotesControllerCreateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const removeUsersMeNote = useUsersMeNotesControllerRemoveUserNote({
+  const removeMeNote = useMeNotesControllerRemoveUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const updateUsersMeNotes = useUsersMeNotesControllerUpdateUserNote({
+  const updateMeNotes = useMeNotesControllerUpdateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
@@ -66,7 +71,7 @@ const NotesPage: NextPageWithLayout = () => {
     <Stack width="100%" alignItems="center" spacing={4}>
       <NoteCard
         onSave={(data) =>
-          createUsersMeNote
+          createMeNote
             .mutateAsync({
               data,
             })
@@ -84,7 +89,7 @@ const NotesPage: NextPageWithLayout = () => {
               }}
               data={{ title: note.title, content: note.content }}
               onSave={(data) =>
-                updateUsersMeNotes
+                updateMeNotes
                   .mutateAsync({
                     id: note.id.toString(),
                     data: {
@@ -96,7 +101,7 @@ const NotesPage: NextPageWithLayout = () => {
                   .catch(() => toast.error("Error updating note"))
               }
               onDelete={() =>
-                removeUsersMeNote
+                removeMeNote
                   .mutateAsync({
                     id: note.id.toString(),
                   })

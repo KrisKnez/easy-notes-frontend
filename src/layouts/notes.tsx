@@ -1,10 +1,9 @@
 import {
-  getUsersMeNotesControllerFindAllUserNotesQueryKey,
-  useUsersMeNotesControllerCreateUserNote,
-  useUsersMeNotesControllerFindAllUserNotes,
-  useUsersMeNotesControllerRemoveUserNote,
-  useUsersMeNotesControllerSearchUserNotes,
-  useUsersMeNotesControllerUpdateUserNote,
+  getMeNotesControllerFindAllUserNotesQueryKey,
+  useMeNotesControllerCreateUserNote,
+  useMeNotesControllerFindAllUserNotes,
+  useMeNotesControllerRemoveUserNote,
+  useMeNotesControllerUpdateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import FaCCuseHover from "@/components/facc-use-hover";
@@ -48,44 +47,47 @@ const NotesLayout = (props: NotesLayoutProps) => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useUsersMeNotesControllerFindAllUserNotes({
-    axios: axiosConfig,
-    query: {
-      retry(failureCount, error) {
-        toast.error(error.message || "Unknown Error");
+  const { data } = useMeNotesControllerFindAllUserNotes(
+    {},
+    {
+      axios: axiosConfig,
+      query: {
+        retry(failureCount, error) {
+          toast.error(error.message || "Unknown Error");
 
-        return true;
+          return true;
+        },
       },
-    },
-  });
+    }
+  );
 
   // Mutations
-  const createUsersMeNote = useUsersMeNotesControllerCreateUserNote({
+  const createMeNote = useMeNotesControllerCreateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const removeUsersMeNote = useUsersMeNotesControllerRemoveUserNote({
+  const removeMeNote = useMeNotesControllerRemoveUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const updateUsersMeNotes = useUsersMeNotesControllerUpdateUserNote({
+  const updateMeNotes = useMeNotesControllerUpdateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
@@ -94,23 +96,23 @@ const NotesLayout = (props: NotesLayoutProps) => {
   const [searchNotesTerm, setSearchNotesTerm] = useState("");
   const searchNotesTermDebounce = useDebounce(searchNotesTerm, 750);
 
-  const { data: searchNotesResult, isLoading: searchNotesIsLoading } =
-    useUsersMeNotesControllerSearchUserNotes(
-      {
-        term: searchNotesTermDebounce,
-      },
-      {
-        axios: axiosConfig,
-        query: {
-          // Do not query if empty string
-          enabled: Boolean(searchNotesTermDebounce),
-        },
-      }
-    );
+  // const { data: searchNotesResult, isLoading: searchNotesIsLoading } =
+  //   useMeNotesControllerSearchUserNotes(
+  //     {
+  //       term: searchNotesTermDebounce,
+  //     },
+  //     {
+  //       axios: axiosConfig,
+  //       query: {
+  //         // Do not query if empty string
+  //         enabled: Boolean(searchNotesTermDebounce),
+  //       },
+  //     }
+  //   );
 
-  const waitForSearch =
-    Boolean(searchNotesTerm) &&
-    (searchNotesTerm !== searchNotesTermDebounce || searchNotesIsLoading);
+  // const waitForSearch =
+  //   Boolean(searchNotesTerm) &&
+  //   (searchNotesTerm !== searchNotesTermDebounce || searchNotesIsLoading);
 
   return (
     <Dashboard3Layout>
@@ -188,7 +190,7 @@ const NotesLayout = (props: NotesLayoutProps) => {
                                   actionOnClick: () => console.log("test"),
                                 })
                                   .then(() => {
-                                    removeUsersMeNote
+                                    removeMeNote
                                       .mutateAsync({
                                         id: note.id.toString(),
                                       })
@@ -223,7 +225,7 @@ const NotesLayout = (props: NotesLayoutProps) => {
         <Grid item xs={12} sm={8} lg={9.5}>
           {/* <NoteCard
             onSave={(data) =>
-              createUsersMeNote
+              createMeNote
                 .mutateAsync({
                   data,
                 })

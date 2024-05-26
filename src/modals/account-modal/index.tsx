@@ -16,9 +16,9 @@ import {
 } from "@mui/material";
 import { MdClose, MdPassword, MdSaveAlt } from "react-icons/md";
 import {
-  getUsersMeControllerMeQueryKey,
-  useUsersMeControllerMe,
-  useUsersMeControllerUpdateMe,
+  getMeControllerMeQueryKey,
+  useMeControllerMe,
+  useMeControllerUpdateMe,
 } from "@/api";
 import ChangePasswordModal from "../change-password-modal";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -43,7 +43,7 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
 
   const queryClient = useQueryClient();
 
-  const { data } = useUsersMeControllerMe({
+  const { data } = useMeControllerMe({
     axios: axiosConfig,
     query: {
       refetchOnWindowFocus: false,
@@ -71,11 +71,11 @@ const AccountModal = NiceModal.create((props: AccountModalProps) => {
     }
   }, [data, isReset, reset]);
 
-  const usersMeUpdateMe = useUsersMeControllerUpdateMe({
+  const usersMeUpdateMe = useMeControllerUpdateMe({
     axios: axiosConfig,
     mutation: {
       onSuccess(data) {
-        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
+        queryClient.setQueryData(getMeControllerMeQueryKey(), data);
 
         reset({
           name: data.data.name || "",

@@ -20,11 +20,11 @@ import {
 import NoteCard from "@/components/note-card2";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  getUsersMeNotesControllerFindAllUserNotesQueryKey,
-  useUsersMeNotesControllerCreateUserNote,
-  useUsersMeNotesControllerFindAllUserNotes,
-  useUsersMeNotesControllerRemoveUserNote,
-  useUsersMeNotesControllerUpdateUserNote,
+  getMeNotesControllerFindAllUserNotesQueryKey,
+  useMeNotesControllerCreateUserNote,
+  useMeNotesControllerFindAllUserNotes,
+  useMeNotesControllerRemoveUserNote,
+  useMeNotesControllerUpdateUserNote,
 } from "@/api";
 import { axiosConfig } from "@/axios";
 import { toast } from "react-hot-toast";
@@ -40,7 +40,7 @@ const NotesPage: NextPageWithLayout = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useUsersMeNotesControllerFindAllUserNotes({
+  const { data } = useMeNotesControllerFindAllUserNotes({
     axios: axiosConfig,
     query: {
       retry(failureCount, error) {
@@ -52,32 +52,32 @@ const NotesPage: NextPageWithLayout = () => {
   });
 
   // Mutations
-  const createUsersMeNote = useUsersMeNotesControllerCreateUserNote({
+  const createMeNote = useMeNotesControllerCreateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const removeUsersMeNote = useUsersMeNotesControllerRemoveUserNote({
+  const removeMeNote = useMeNotesControllerRemoveUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
   });
-  const updateUsersMeNotes = useUsersMeNotesControllerUpdateUserNote({
+  const updateMeNotes = useMeNotesControllerUpdateUserNote({
     axios: axiosConfig,
     mutation: {
       onSuccess(data, variables, context) {
         queryClient.invalidateQueries(
-          getUsersMeNotesControllerFindAllUserNotesQueryKey()
+          getMeNotesControllerFindAllUserNotesQueryKey()
         );
       },
     },
@@ -153,7 +153,7 @@ const NotesPage: NextPageWithLayout = () => {
       <Grid item xs={12} sm={8} lg={9.5}>
         <NoteCard
           onSave={(data) =>
-            createUsersMeNote
+            createMeNote
               .mutateAsync({
                 data,
               })

@@ -1,4 +1,4 @@
-import { getUsersMeControllerMeQueryKey, useAuthControllerLogout } from "@/api";
+import { getMeControllerMeQueryKey, useAuthControllerLogout } from "@/api";
 import { axiosConfig } from "@/axios";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -10,7 +10,7 @@ const useLogoutMutation = () => {
     mutation: {
       onSuccess(data, variables, context) {
         // This will trigger auth component to consider the user logged out
-        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), null);
+        queryClient.setQueryData(getMeControllerMeQueryKey(), null);
 
         // This will delete all cached data so when a new user logs there is no possibility of stale data
         queryClient.invalidateQueries();

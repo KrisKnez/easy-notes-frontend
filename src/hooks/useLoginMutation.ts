@@ -1,4 +1,4 @@
-import { getUsersMeControllerMeQueryKey, useAuthControllerLogin } from "@/api";
+import { getMeControllerMeQueryKey, useAuthControllerLogin } from "@/api";
 import { axiosConfig } from "@/axios";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -9,7 +9,7 @@ const useLoginMutation = () => {
     axios: axiosConfig,
     mutation: {
       onSuccess(data) {
-        queryClient.setQueryData(getUsersMeControllerMeQueryKey(), data);
+        queryClient.setQueryData(getMeControllerMeQueryKey(), data);
       },
       // Simulate delay
       onMutate: () => new Promise((resolve) => setTimeout(resolve, 750)),

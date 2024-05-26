@@ -43,12 +43,19 @@ const NotesLayout = (props: NotesLayoutProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [searchNotesTerm, setSearchNotesTerm] = useState("");
+  const searchNotesTermDebounce = useDebounce(searchNotesTerm, 750);
+
   // Query Client
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useMeNotesControllerFindAllUserNotes(
-    {},
+  const { data, isLoading } = useMeNotesControllerFindAllUserNotes(
+    {
+      ...(searchNotesTermDebounce && {
+        search: searchNotesTermDebounce,
+      }),
+    },
     {
       axios: axiosConfig,
       query: {
@@ -57,6 +64,7 @@ const NotesLayout = (props: NotesLayoutProps) => {
 
           return true;
         },
+        // enabled: Boolean(searchNotesTermDebounce),
       },
     }
   );
@@ -93,26 +101,8 @@ const NotesLayout = (props: NotesLayoutProps) => {
     },
   });
 
-  const [searchNotesTerm, setSearchNotesTerm] = useState("");
-  const searchNotesTermDebounce = useDebounce(searchNotesTerm, 750);
-
-  // const { data: searchNotesResult, isLoading: searchNotesIsLoading } =
-  //   useMeNotesControllerSearchUserNotes(
-  //     {
-  //       term: searchNotesTermDebounce,
-  //     },
-  //     {
-  //       axios: axiosConfig,
-  //       query: {
-  //         // Do not query if empty string
-  //         enabled: Boolean(searchNotesTermDebounce),
-  //       },
-  //     }
-  //   );
-
-  // const waitForSearch =
-  //   Boolean(searchNotesTerm) &&
-  //   (searchNotesTerm !== searchNotesTermDebounce || searchNotesIsLoading);
+  const waitForSearch =
+    searchNotesTerm !== searchNotesTermDebounce || isLoading;
 
   return (
     <Dashboard3Layout>
@@ -156,69 +146,74 @@ const NotesLayout = (props: NotesLayoutProps) => {
                 />
               </ListItem>
 
-              {waitForSearch && "Loading..."}
-
-              {(Boolean(searchNotesTerm)
-                ? searchNotesResult?.data
-                : data?.data
-              )?.map((note) => (
-                <FaCCuseHover key={note.id}>
-                  {(ref, hovering) => (
-                    <Link
-                      href={`/dashboard/notes2/${note.id}`}
-                      style={{ all: "unset" }}
-                    >
-                      <ListItem
-                        ref={ref}
-                        disablePadding
-                        secondaryAction={
-                          (hovering || isMobile) && (
-                            <IconButton
-                              // Stop Ripple from propagating to ListItemButton
-                              onMouseDown={(e) => {
-                                e.stopPropagation();
-                              }}
-                              onClick={() =>
-                                NiceModal.show(ConfirmationModal, {
-                                  title: "Delete Note",
-                                  description:
-                                    "Are you sure you want to delete this note?",
-                                  icon: <MdDelete />,
-                                  iconColor: "#e74c3c",
-                                  actionLabel: "Delete",
-                                  actionColor: "error",
-                                  actionOnClick: () => console.log("test"),
-                                })
-                                  .then(() => {
-                                    removeMeNote
-                                      .mutateAsync({
-                                        id: note.id.toString(),
-                                      })
-                                      .then(() =>
-                                        toast.success(
-                                          "Successfully removed note"
-                                        )
-                                      )
-                                      .catch(() =>
-                                        toast.error("Error removing note")
-                                      );
-                                  })
-                                  .catch((err) => console.log(err))
-                              }
-                            >
-                              <MdDelete />
-                            </IconButton>
-                          )
-                        }
+              {waitForSearch ? (
+                <ListItem>
+                  <ListItemText primary="Loading..." />
+                </ListItem>
+              ) : data?.data.length === 0 ? (
+                <ListItem>
+                  <ListItemText primary="No notes found" />
+                </ListItem>
+              ) : (
+                data?.data?.map((note) => (
+                  <FaCCuseHover key={note.id}>
+                    {(ref, hovering) => (
+                      <Link
+                        href={`/dashboard/notes2/${note.id}`}
+                        style={{ all: "unset" }}
                       >
-                        <ListItemButton>
-                          <ListItemText primary={note.title} />
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
-                </FaCCuseHover>
-              ))}
+                        <ListItem
+                          ref={ref}
+                          disablePadding
+                          secondaryAction={
+                            (hovering || isMobile) && (
+                              <IconButton
+                                // Stop Ripple from propagating to ListItemButton
+                                onMouseDown={(e) => {
+                                  e.stopPropagation();
+                                }}
+                                onClick={() =>
+                                  NiceModal.show(ConfirmationModal, {
+                                    title: "Delete Note",
+                                    description:
+                                      "Are you sure you want to delete this note?",
+                                    icon: <MdDelete />,
+                                    iconColor: "#e74c3c",
+                                    actionLabel: "Delete",
+                                    actionColor: "error",
+                                    actionOnClick: () => console.log("test"),
+                                  })
+                                    .then(() => {
+                                      removeMeNote
+                                        .mutateAsync({
+                                          id: note.id.toString(),
+                                        })
+                                        .then(() =>
+                                          toast.success(
+                                            "Successfully removed note"
+                                          )
+                                        )
+                                        .catch(() =>
+                                          toast.error("Error removing note")
+                                        );
+                                    })
+                                    .catch((err) => console.log(err))
+                                }
+                              >
+                                <MdDelete />
+                              </IconButton>
+                            )
+                          }
+                        >
+                          <ListItemButton>
+                            <ListItemText primary={note.title} />
+                          </ListItemButton>
+                        </ListItem>
+                      </Link>
+                    )}
+                  </FaCCuseHover>
+                ))
+              )}
             </List>
           </Paper>
         </Grid>

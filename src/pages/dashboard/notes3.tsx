@@ -40,16 +40,19 @@ const NotesPage: NextPageWithLayout = () => {
   const queryClient = useQueryClient();
 
   // Queries
-  const { data } = useMeNotesControllerFindAllUserNotes({
-    axios: axiosConfig,
-    query: {
-      retry(failureCount, error) {
-        toast.error(error.message || "Unknown Error");
+  const { data } = useMeNotesControllerFindAllUserNotes(
+    {},
+    {
+      axios: axiosConfig,
+      query: {
+        retry(failureCount, error) {
+          toast.error(error.message || "Unknown Error");
 
-        return true;
+          return true;
+        },
       },
-    },
-  });
+    }
+  );
 
   // Mutations
   const createMeNote = useMeNotesControllerCreateUserNote({

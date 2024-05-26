@@ -1,4 +1,4 @@
-import { useMeControllerChangePassword } from "@/api";
+import { useAuthControllerChangePassword } from "@/api";
 import { axiosConfig } from "@/axios";
 import getAllFieldErrorMessages from "@/utils/axios-error-handling/get-all-field-error-messages";
 import NiceModal, { muiDialog, useModal } from "@ebay/nice-modal-react";
@@ -46,7 +46,7 @@ const ChangePasswordModal = NiceModal.create(
       },
     });
 
-    const usersMeChangePassword = useMeControllerChangePassword({
+    const authChangePassword = useAuthControllerChangePassword({
       axios: axiosConfig,
       mutation: {
         onSuccess() {
@@ -70,7 +70,12 @@ const ChangePasswordModal = NiceModal.create(
         component="form"
         onTransitionExited={modal.remove}
         onSubmit={handleSubmit((data) => {
-          usersMeChangePassword.mutate({ data });
+          authChangePassword.mutate({
+            data: {
+              currentPassword: data.currentPassword,
+              newPassword: data.newPassword,
+            },
+          });
         })}
       >
         <DialogTitle>
@@ -149,9 +154,9 @@ const ChangePasswordModal = NiceModal.create(
           <Button
             type="submit"
             variant="contained"
-            disabled={!isValid || usersMeChangePassword.isLoading}
+            disabled={!isValid || authChangePassword.isLoading}
             endIcon={
-              (usersMeChangePassword.isLoading && (
+              (authChangePassword.isLoading && (
                 <CircularProgress size="1em" color="inherit" />
               )) || <MdSaveAlt />
             }

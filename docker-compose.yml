@@ -10,6 +10,8 @@ services:
     restart: always
     #ports:
     #  - 3000:3000
+    networks:
+      - portainer_default
     labels:
       # Frontend
       - "traefik.enable=true"
@@ -18,3 +20,7 @@ services:
       - "traefik.http.services.easy-notes.loadbalancer.server.port=3000"
       - "traefik.http.routers.easy-notes.service=easy-notes"
       - "traefik.http.routers.easy-notes.tls.certresolver=leresolver"
+
+networks:
+  portainer_default:
+    external: true

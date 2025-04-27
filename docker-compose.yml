@@ -8,5 +8,13 @@ services:
         ENV_VARIABLE: ${ENV_VARIABLE}
         NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
     restart: always
-    ports:
-      - 3000:3000
+    #ports:
+    #  - 3000:3000
+    labels:
+      # Frontend
+      - "traefik.enable=true"
+      - "traefik.http.routers.easy-notes.rule=Host(`easy-notes.s5.krisknez.com`)"
+      - "traefik.http.routers.easy-notes.entrypoints=websecure"
+      - "traefik.http.services.easy-notes.loadbalancer.server.port=3000"
+      - "traefik.http.routers.easy-notes.service=easy-notes"
+      - "traefik.http.routers.easy-notes.tls.certresolver=leresolver"

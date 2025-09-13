@@ -1,0 +1,23 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: install
+  image: node:20-alpine
+  commands:
+  - npm ci
+
+- name: build
+  image: node:20-alpine
+  commands:
+  - npm run build
+  depends_on:
+  - install
+
+- name: test
+  image: node:20-alpine
+  commands:
+  - npm run test
+  depends_on:
+  - install
